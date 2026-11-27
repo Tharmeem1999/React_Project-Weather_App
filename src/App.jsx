@@ -1,122 +1,55 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Header from "./components/Header";
+import SearchBar from "./components/SearchBar";
+import CurrentWeather from "./components/CurrentWeather";
+import HourlyForecast from "./components/HourlyForecast";
+import Forecast from "./components/Forecast";
+
+const App = () => {
+  // State to store raw weather data from API
+  const [data, setData] = useState(null);
+
+  // State to store the currently selected city
+  const [selectedCity, setSelectedCity] = useState(null);
+
+  // State to store transform current weather data
+  const [weatherData, setWeatherData] = useState(null);
+
+  // State to store tranformed 6-day forecast data
+  const [forecastData, setForecastData] = useState([]);
+
+  // State to store transformed hourly forcast data
+  const [hourlyData, setHourlyData] = useState([]);
+
+  // Handle selection of a city from the search bar
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    // Page container with gradient bckground
+    <div className="min-h-screen bg-linear-to-br from-blue-400 via-blue-500" >
+      {/* Inner coontainer for spacing */}
+      <div className="container mx-auto px-4 py-8">
+        {/* App header section */}
+        <Header />
 
-      <div className="ticks"></div>
+        {/* Search bar for selecting cities */}
+        <SearchBar onCitySelect={handleCitySelect} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Show current weather if available */}
+        {weatherData && <CurrentWeather weather={weatherData} />}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+        {/* Show hourly forecast if available */}
+        {hourlyData.length > 0 && <HourlyForecast hourlyData={hourlyData} />}
 
-export default App
+        {/* Show 6-day forcast if available */}
+        {forecastData.length > 0 && <Forecast forecastData={forecastData} />}
+
+      </div>
+    </div>
+  );
+};
+
+export default App;
